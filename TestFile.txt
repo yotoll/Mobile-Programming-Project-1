@@ -6,3 +6,4 @@ Possible/Current Features and Goals
 - Request a GPS location from someone
 - Open Google Maps in-app from link in message
 - Make it pretty
+-Read from contacts
