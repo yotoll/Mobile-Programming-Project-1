@@ -7,3 +7,4 @@ Possible/Current Features and Goals
 - Open Google Maps in-app from link in message
 - Make it pretty
 -Read from contacts
+-Recent locations
