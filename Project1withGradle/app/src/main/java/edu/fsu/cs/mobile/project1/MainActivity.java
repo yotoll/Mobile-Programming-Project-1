@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.SmsManager;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     double lat;
     double lon;
+    String phoneNo;
 
     EditText phoneNumber;
     LocationManager locationManager;
