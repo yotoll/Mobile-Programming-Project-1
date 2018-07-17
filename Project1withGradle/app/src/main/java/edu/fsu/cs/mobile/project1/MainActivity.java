@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
             case MY_PERMISSIONS_REQUEST_SEND_SMS: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(phoneNo, null, messagebase, null, null);
+                    smsManager.sendTextMessage(phoneNo, null, messageupdate, null, null);
 
                 } else {
                     Toast.makeText(getApplicationContext(),
