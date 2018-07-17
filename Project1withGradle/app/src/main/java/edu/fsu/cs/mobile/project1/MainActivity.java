@@ -45,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
         sendBtn = findViewById(R.id.sendButton);
         phoneNumber = (EditText) findViewById(R.id.numText);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        
+        //sends broadcast info to locationlist
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            onRecent();
+        }
+        
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,12 +65,7 @@ public class MainActivity extends AppCompatActivity {
             phoneNumber.setText(getIntent().getStringExtra("cnumber"));
         }
 
-        //Display recently received locations
-        Fragment f = new LocationList();
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.add(R.id.fl_recent,f);
-        transaction.commit();
+    
 
         locationListener = new LocationListener() {
             @Override
@@ -166,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onRecent(View v)
+    public void onRecent()
     {
         Fragment f = new LocationList();
         FragmentManager fm = getSupportFragmentManager();
