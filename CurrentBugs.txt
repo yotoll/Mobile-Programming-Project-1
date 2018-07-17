@@ -6,3 +6,10 @@ Possible/Current Features and Goals
 - Make it pretty
 - Read from contacts
 - Recent locations
+
+Maybe?
+- Not use an API connected to Dominick's google account
+
+BUGS
+- Broadcast Receiver does not activate on SMS reception
+- Application does not play nice with emulators

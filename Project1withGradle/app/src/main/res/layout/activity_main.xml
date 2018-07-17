@@ -10,12 +10,10 @@
         android:id="@+id/sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="125dp"
-        android:layout_marginStart="125dp"
+        android:layout_above="@+id/phoneText"
+        android:layout_centerHorizontal="true"
         android:maxLines="1"
+        android:onClick="onMap"
         android:paddingLeft="15dip"
         android:paddingRight="15dip"
         android:text="Send" />
@@ -24,21 +22,24 @@
         android:id="@+id/phoneText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:layout_marginStart="100dp"
-        android:layout_below="@id/sendButton"
+        android:layout_above="@+id/numText"
+        android:layout_centerHorizontal="true"
         android:text="Enter Phone Number" />
 
     <EditText
         android:id="@+id/numText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/phoneText"
-        android:layout_marginLeft="75dp"
-        android:layout_marginStart="75dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:ems="10"
         android:inputType="number" />
 
+    <WebView
+        android:id="@+id/wv_map"
+        android:layout_width="match_parent"
+        android:layout_height="453dp"
+        android:visibility="visible" />
 
 
 </RelativeLayout>
