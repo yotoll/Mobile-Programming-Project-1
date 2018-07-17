@@ -28,9 +28,11 @@ public class LocationReceiver extends BroadcastReceiver {
 
                     Intent inte = new Intent(context.getApplicationContext(), MainActivity.class);
                     inte.putExtra("msgContent", messages[0].getMessageBody());
+                    inte.putExtra("phoneNum", messages[0].getDisplayOriginatingAddress());
                     inte.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // adding this flag starts the new Activity in a new Task
                     context.startActivity(inte);
                     Log.i(TAG, "Message received: " + messages[0].getMessageBody());
+                    Log.i(TAG, "phoneno: " + messages[0].getDisplayOriginatingAddress());
 
                 }
             }
