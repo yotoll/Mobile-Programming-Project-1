@@ -50,13 +50,6 @@ public class LocationList extends ListFragment {
         setListAdapter(adapt);
         list = new ListView(getActivity());
 
-        test = v.findViewById(R.id.addStuff);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addResult("Testing : " + taken);
-            }
-        });
 
         return v;
     }

@@ -1,6 +1,7 @@
 package edu.fsu.cs.mobile.project1;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.os.Bundle;
@@ -48,7 +49,12 @@ public class ContactSelecter extends ListActivity {
                 String name = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String number = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                Toast.makeText(getApplicationContext(),name + " " + number, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),name + " " + number, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("cname", name);
+                intent.putExtra("cnumber", number);
+                startActivity(intent);
             }
         });
     }

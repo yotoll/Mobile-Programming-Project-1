@@ -53,13 +53,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Check if number is pass to activity
+        if(getIntent().hasExtra("cname") && getIntent().hasExtra("cnumber")){
+            phoneNumber.setText(getIntent().getStringExtra("cnumber"));
+        }
+
+        //Display recently received locations
+        Fragment f = new LocationList();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.add(R.id.fl_recent,f);
+        transaction.commit();
+
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 messageupdate = messagebase + location.getLatitude()+ ","+location.getLongitude();
                 lat = location.getLatitude();
                 lon = location.getLongitude();
-                Toast.makeText(MainActivity.this, messageupdate, Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, messageupdate, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -78,18 +90,18 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String [] {
+                requestPermissions(new String [] {
                     Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.INTERNET,Manifest.permission_group.SMS
+                    Manifest.permission.INTERNET,Manifest.permission_group.SMS,Manifest.permission.READ_CONTACTS,
             },7);
             return;
             
         }
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},
-                MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
+
         locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
 
     }
+
     protected void sendSMSMessage() {
         phoneNo = phoneNumber.getText().toString();
 
@@ -137,15 +149,29 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    /////////////////////////////////////////////////////////////
-    //Method to open map                                       //
-    /////////////////////////////////////////////////////////////
 
+
+    //Method to open map
     public void onMap (View v)
     {
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra("LAT", lat);
         intent.putExtra("LON", lon);
         startActivity(intent);
+    }
+
+    public void onContacts(View v)
+    {
+        Intent intent = new Intent(this, ContactSelecter.class);
+        startActivity(intent);
+    }
+
+    public void onRecent(View v)
+    {
+        Fragment f = new LocationList();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.add(R.id.fl_recent,f);
+        transaction.commit();
     }
 }

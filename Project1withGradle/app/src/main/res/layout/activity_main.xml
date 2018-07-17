@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/phoneText"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="96dp"
         android:maxLines="1"
         android:onClick="onMap"
         android:paddingLeft="15dip"
@@ -34,6 +35,22 @@
         android:layout_centerHorizontal="true"
         android:ems="10"
         android:inputType="number" />
+
+    <Button
+        android:id="@+id/contactsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sendButton"
+        android:layout_centerHorizontal="true"
+        android:onClick="onContacts"
+        android:text="Select from Contacts" />
+
+    <FrameLayout
+        android:id="@+id/fl_recent"
+        android:layout_width="match_parent"
+        android:layout_height="405dp">
+
+    </FrameLayout>
 
 
 </RelativeLayout>
