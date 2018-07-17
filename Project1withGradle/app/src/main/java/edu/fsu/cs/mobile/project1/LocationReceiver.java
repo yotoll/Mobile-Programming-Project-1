@@ -7,6 +7,9 @@ import android.content.Intent;
 public class LocationReceiver extends BroadcastReceiver
 {
 
+    private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    private static final String TAG = "LocationReceiver";
+
     @Override
     public void onReceive(Context context, Intent intent)
     {
