@@ -46,11 +46,9 @@ public class MainActivity extends AppCompatActivity {
         phoneNumber = (EditText) findViewById(R.id.numText);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         
-        //sends broadcast info to locationlist
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
+    
             onRecent();
-        }
+        
         
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
