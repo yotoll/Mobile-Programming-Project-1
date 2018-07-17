@@ -35,11 +35,5 @@
         android:ems="10"
         android:inputType="number" />
 
-    <WebView
-        android:id="@+id/wv_map"
-        android:layout_width="match_parent"
-        android:layout_height="453dp"
-        android:visibility="visible" />
-
 
 </RelativeLayout>
