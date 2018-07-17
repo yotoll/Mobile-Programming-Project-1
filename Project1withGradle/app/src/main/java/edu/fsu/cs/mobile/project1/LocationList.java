@@ -26,6 +26,8 @@ public class LocationList extends ListFragment {
     ListView list;
     public ArrayList<String> locations;
     public ArrayAdapter<String> adapt;
+    String messageContent;
+    String messageSender;
 
     public Button test;
 
@@ -49,6 +51,14 @@ public class LocationList extends ListFragment {
         taken = 0;
         setListAdapter(adapt);
         list = new ListView(getActivity());
+        
+        // Phone Number and Message from BroadCast Receiver
+        Bundle extras = getActivity().getIntent().getExtras();
+        if (extras != null) {
+            messageContent = extras.getString("msgContent");
+            messageSender = extras.getString("phoneNum");
+
+        }
 
 
         return v;
