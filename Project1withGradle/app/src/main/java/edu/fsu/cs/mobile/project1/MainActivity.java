@@ -29,7 +29,9 @@ public class MainActivity extends AppCompatActivity {
     EditText phoneNumber;
     LocationManager locationManager;
     LocationListener locationListener;
-
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
+    private static final int MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10;
+    Button sendBtn;
     String messagebase="http://maps.google.com/maps?saddr=";//+lat+","+lon;
     String messageupdate="";
 
@@ -37,9 +39,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        sendBtn = findViewById(R.id.sendButton);
         phoneNumber = (EditText) findViewById(R.id.numText);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendSMSMessage();
+
+            }
+        });
 
         locationListener = new LocationListener() {
             @Override
@@ -71,20 +80,60 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.INTERNET,Manifest.permission_group.SMS
             },7);
             return;
+            
         }
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},
+                MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
         locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
 
+    }
+    protected void sendSMSMessage() {
+        phoneNo = phoneNumber.getText().toString();
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.SEND_SMS)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.SEND_SMS},
+                        MY_PERMISSIONS_REQUEST_SEND_SMS);
+            }
+        } else {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNo, null, messageupdate, null, null);
+            Toast.makeText(getApplicationContext(), "SMS sent.",
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode){
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_SEND_SMS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(phoneNo, null, messagebase, null, null);
+
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "SMS faild, please try again.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+            case MY_PERMISSIONS_REQUEST_SMS_RECEIVE:
+            {
+                //for broadcast
+
+            }
             case 7:
-                if (grantResults.length>0 && grantResults[0]== PackageManager.PERMISSION_GRANTED)
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     phoneNumber.setText("something");
+
+
         }
     }
-
     /////////////////////////////////////////////////////////////
     //Method to open map                                       //
     /////////////////////////////////////////////////////////////
