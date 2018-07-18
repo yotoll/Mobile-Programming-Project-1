@@ -101,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         }
+        //Do not delete this please....
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},
+        MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
+       
+
 
         locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
 
