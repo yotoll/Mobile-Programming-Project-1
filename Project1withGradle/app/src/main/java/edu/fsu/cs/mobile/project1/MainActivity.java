@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         emergency = findViewById(R.id.s_urgent);
 
+//        onRecent();
+
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager.requestLocationUpdates("gps", 2500, 0, locationListener);
 
-        onRecent();
     }
 
     protected void sendSMSMessage() {
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onRecent()
+    public void onRecent(View v)
     {
        LocationList f = new LocationList();
 

@@ -18,6 +18,7 @@
         android:paddingRight="15dip"
         android:text="Send"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.67"
         app:layout_constraintStart_toEndOf="@+id/numText"
         app:layout_constraintTop_toBottomOf="@+id/contactsButton" />
 
