@@ -20,41 +20,46 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    //Variables
     double lat;
     double lon;
     String phoneNo;
+    String messagebase="http://maps.google.com/maps?saddr="; //+lat+","+lon;
+    String messageupdate="";
+    String messageurgent="URGENT ";
+    Switch emergency;
 
+    //Views and such
     EditText phoneNumber;
     LocationManager locationManager;
     LocationListener locationListener;
+    Button sendBtn;
+
+
+    //Constants
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
     private static final int MY_PERMISSIONS_REQUEST_SMS_RECEIVE = 10;
-    Button sendBtn;
-    String messagebase="http://maps.google.com/maps?saddr=";//+lat+","+lon;
-    String messageupdate="";
 
-    LocationList f;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         sendBtn = findViewById(R.id.sendButton);
         phoneNumber = (EditText) findViewById(R.id.numText);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        emergency = findViewById(R.id.s_urgent);
 
 
-        f = new LocationList();
-
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.add(R.id.fl_recent,f);
-        transaction.commit();
 
         onRecent();
 
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location) {
                 messageupdate = messagebase + location.getLatitude()+ ","+location.getLongitude();
+                messageurgent += messagebase + location.getLatitude()+ ","+location.getLongitude();
                 lat = location.getLatitude();
                 lon = location.getLongitude();
 //                Toast.makeText(MainActivity.this, messageupdate, Toast.LENGTH_LONG).show();
@@ -126,9 +132,25 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNo, null, messageupdate, null, null);
-            Toast.makeText(getApplicationContext(), "SMS sent.",
-                    Toast.LENGTH_LONG).show();
+
+            if (phoneNo.equals(""))
+            {
+                Toast.makeText(getApplicationContext(), "No number entered.", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if ((phoneNo.length() != 10) && (phoneNo.length() != 12))
+            {
+                Toast.makeText(getApplicationContext(), "Invalid number entered. Length " + phoneNo.length(), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (emergency.isChecked())
+                smsManager.sendTextMessage(phoneNo, null, messageurgent, null, null);
+            else
+                smsManager.sendTextMessage(phoneNo, null, messageupdate, null, null);
+
+//            Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -177,10 +199,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void onRecent()
     {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
-            f.addResult(extras.getString("msgContent"),extras.getString("phoneNum"));
-        }
+       LocationList f = new LocationList();
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.add(R.id.fl_recent,f);
+        transaction.commit();
     }
 }

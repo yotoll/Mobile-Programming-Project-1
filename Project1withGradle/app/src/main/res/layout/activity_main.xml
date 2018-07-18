@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,47 +10,68 @@
         android:id="@+id/sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/phoneText"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="96dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:maxLines="1"
-        android:onClick="onMap"
         android:paddingLeft="15dip"
         android:paddingRight="15dip"
-        android:text="Send" />
-
-    <TextView
-        android:id="@+id/phoneText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/numText"
-        android:layout_centerHorizontal="true"
-        android:text="Enter Phone Number" />
+        android:text="Send"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/numText"
+        app:layout_constraintTop_toBottomOf="@+id/contactsButton" />
 
     <EditText
         android:id="@+id/numText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="number" />
+        android:hint="123-456-7890"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="@+id/contactsButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contactsButton" />
 
     <Button
         android:id="@+id/contactsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/sendButton"
-        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:onClick="onContacts"
-        android:text="Select from Contacts" />
+        android:text="Select from Contacts"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/fl_recent"
         android:layout_width="match_parent"
-        android:layout_height="405dp">
+        android:layout_height="405dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/numText">
 
     </FrameLayout>
 
+    <Switch
+        android:id="@+id/s_urgent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Emergency"
+        app:layout_constraintBottom_toTopOf="@+id/numText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/contactsButton"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

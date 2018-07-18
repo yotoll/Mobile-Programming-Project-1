@@ -90,7 +90,7 @@ public class ContactSelecter extends ListActivity {
                 //Toast.makeText(getApplicationContext(),name + " " + number, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("cnmae", name);
+                intent.putExtra("cname", name);
                 intent.putExtra("cnumber", number);
                 startActivity(intent);
             }
