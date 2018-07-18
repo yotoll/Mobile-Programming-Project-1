@@ -57,6 +57,20 @@ public class MainActivity extends AppCompatActivity {
         phoneNumber = (EditText) findViewById(R.id.numText);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         emergency = findViewById(R.id.s_urgent);
+        
+        Bundle extras = getIntent().getExtras();
+         if (getIntent().hasExtra("msgContent")) {
+             messageContent = extras.getString("msgContent");
+              String holder[] = messageContent.split("=");
+              String holder2[] = holder[1].split(",");
+              lat = Double.parseDouble(holder2[0]);
+              lon = Double.parseDouble(holder2[1]);
+              onMap();
+
+         }
+
+
+
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Method to open map
-    public void onMap (View v)
+    public void onMap ()
     {
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra("LAT", lat);
