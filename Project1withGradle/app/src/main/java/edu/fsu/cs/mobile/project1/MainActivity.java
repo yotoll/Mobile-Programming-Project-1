@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     String messagebase="http://maps.google.com/maps?saddr=";//+lat+","+lon;
     String messageupdate="";
 
-    Fragment f;
+    LocationList f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         f = new LocationList();
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.add(R.id.fl_recent,f);
+        transaction.commit();
 
         onRecent();
 
@@ -101,11 +106,6 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         }
-        //Do not delete this please....
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},
-        MY_PERMISSIONS_REQUEST_SMS_RECEIVE);
-       
-
 
         locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
 
@@ -177,9 +177,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void onRecent()
     {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.add(R.id.fl_recent,f);
-        transaction.commit();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+            f.addResult(extras.getString("msgContent"),extras.getString("phoneNum"));
+        }
     }
 }
