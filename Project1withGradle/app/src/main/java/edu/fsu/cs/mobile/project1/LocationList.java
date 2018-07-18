@@ -1,19 +1,28 @@
 
 package edu.fsu.cs.mobile.project1;
 
-
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
+
+import edu.fsu.cs.mobile.project1.R;
 
 
 public class LocationList extends ListFragment {
@@ -22,13 +31,10 @@ public class LocationList extends ListFragment {
     public ArrayList<String> locations, contacts;
     public ArrayAdapter<String> adapt;
 
-    String messageContent;
-    String messageSender;
 
     private int taken;
     public static final String TAG = LocationList.class.getCanonicalName();
     public static final String Prefs = "RecentLocFile";
-    public static final String TAKEN = "taken";
 
     public LocationList() {
         // Required empty public constructor
@@ -45,13 +51,11 @@ public class LocationList extends ListFragment {
         locations = new ArrayList<String>();
         contacts = new ArrayList<String>();
 
-        SharedPreferences preferences = getActivity().getSharedPreferences(TAKEN, Activity.MODE_PRIVATE);
-        taken = preferences.getInt(TAKEN,0);
 
         //Reading from SharedPreferences for previous locations
         SharedPreferences settings = getActivity().getSharedPreferences(Prefs, 0);
 
-
+        taken = settings.getInt("Taken", 0);
         if (taken > 0)
         {
             locations.add(settings.getString("FirstLoc", "Empty"));
@@ -85,18 +89,9 @@ public class LocationList extends ListFragment {
 
         adapt = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, contacts);
-
+        taken = 0;
         setListAdapter(adapt);
         list = new ListView(getActivity());
-
-        // Phone Number and Message from BroadCast Receiver
-        Bundle extras = getActivity().getIntent().getExtras();
-        if (extras != null) {
-            messageContent = extras.getString("msgContent");
-            messageSender = extras.getString("phoneNum");
-            addResult(messageContent,messageSender);
-
-        }
 
         return v;
     }
@@ -107,38 +102,46 @@ public class LocationList extends ListFragment {
     public void onListItemClick(ListView l, View v, int pos, long id)
     {
         super.onListItemClick(l,v,pos,id);
-        double lat, lon;
+        //double lat, lon;
 
         if(taken > 0)
         {
+            //Parse string for location
+            String temp = locations.get(pos).replace("http://maps.google.com/maps?saddr=",
+                    "");
+
+            if(temp.contains("URGENT "))
+            {
+                temp.replace("URGENT ","");
+            }
+
             //pull up location
-            String del = "[ ]+";
-            String [] temp = locations.get(pos).split(del);
+            String del = ",";
+            String [] loca = locations.get(pos).split(del);
 
-            lat = Double.parseDouble(temp[0]);
-            lon = Double.parseDouble(temp[1]);
+            double lat = Double.parseDouble(loca[0]);
+            double lon = Double.parseDouble(loca[1]);
 
+            //Send location to MapsActivity to pull it up
             Intent intent = new Intent(getContext(), MapsActivity.class);
             intent.putExtra("LAT", lat);
             intent.putExtra("LON", lon);
             startActivity(intent);
-
         }
 
     }
 
 
-    //Add on to contact list
+    //Add on to recent location list
     public void addResult(String loc, String con)
     {
-
         String x, y;
 
         x=loc;
         y=con;
 
         if(taken==0)
-        {
+        {   //First result case
             //replace with location
             locations.add(0,x);
 
@@ -152,7 +155,7 @@ public class LocationList extends ListFragment {
         }
         else
         {
-
+            //1 or more results
             locations.add(0,x);
             contacts.add(0,y);
 
@@ -160,6 +163,7 @@ public class LocationList extends ListFragment {
                     android.R.layout.simple_list_item_1, contacts);
             setListAdapter(adapt);
 
+            //Keep only the 5 most recent locations
             if(taken < 5)
                 taken++;
             else
@@ -168,10 +172,6 @@ public class LocationList extends ListFragment {
                 contacts.remove(5);
             }
         }
-        SharedPreferences preferences = getActivity().getSharedPreferences(TAKEN, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(TAKEN, taken);
-        editor.commit();
     }
 
 
@@ -179,7 +179,6 @@ public class LocationList extends ListFragment {
     public void onDetach() {
         //Write to Shared Prefs?
         super.onDetach();
-
 
         //Write recent locations to the shared preferences
         SharedPreferences preferences = getActivity().getSharedPreferences(Prefs,0);
