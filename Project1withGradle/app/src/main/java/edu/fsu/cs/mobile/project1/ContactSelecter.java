@@ -87,7 +87,12 @@ public class ContactSelecter extends ListActivity {
                 String name = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String number = c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                Toast.makeText(getApplicationContext(),name + " " + number, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),name + " " + number, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("cnmae", name);
+                intent.putExtra("cnumber", number);
+                startActivity(intent);
             }
         });
     }
