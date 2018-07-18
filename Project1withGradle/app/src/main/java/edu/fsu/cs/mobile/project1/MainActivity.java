@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     double lon;
     String phoneNo;
     String messagebase="http://maps.google.com/maps?saddr="; //+lat+","+lon;
-    String messageupdate="";
+    String messageupdate="No location";
     Switch emergency;
 
     //Views and such
@@ -57,11 +57,6 @@ public class MainActivity extends AppCompatActivity {
         phoneNumber = (EditText) findViewById(R.id.numText);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         emergency = findViewById(R.id.s_urgent);
-
-
-
-        onRecent();
-
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager.requestLocationUpdates("gps", 2500, 0, locationListener);
 
+        onRecent();
     }
 
     protected void sendSMSMessage() {
@@ -203,5 +199,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.add(R.id.fl_recent,f);
         transaction.commit();
+
+        if (getIntent().hasExtra("msgContent"))
+        {
+            Bundle extras = getIntent().getExtras();
+            f.addResult(extras.getString("msgContent"),extras.getString("phoneNum"));
+        }
     }
 }

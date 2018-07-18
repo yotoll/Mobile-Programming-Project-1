@@ -40,6 +40,10 @@ public class LocationList extends ListFragment {
 
     public LocationList() {
         // Required empty public constructor
+        locations = new ArrayList<String>();
+        contacts = new ArrayList<String>();
+        adapt = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, contacts);
     }
 
 
@@ -48,7 +52,7 @@ public class LocationList extends ListFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_location_list, container, false);
-
+        Log.i("***LocationList***","In onCreateView");
         //Recent location and contact it was from
         locations = new ArrayList<String>();
         contacts = new ArrayList<String>();
@@ -138,34 +142,35 @@ public class LocationList extends ListFragment {
     //Add on to recent location list
     public void addResult(String loc, String con)
     {
+        Log.i("***LocationList***", "In addResult");
         String x, y;
 
         x=loc;
-        y=con;
+        y="Testing"+taken;
 
         if(taken==0)
         {   //First result case
             //replace with location
-            locations.add(0,x);
-            locations.remove(1);
+            //locations.add(0,x);
+            //locations.remove(1);
 
             contacts.add(0,y);
-            contacts.remove(1);
+            //contacts.remove(1);
 
             taken++;
-            adapt = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, contacts);
-
+            //adapt = new ArrayAdapter<String>(getActivity(),
+             //   android.R.layout.simple_list_item_1, contacts);
+            adapt.clear();
+            adapt.addAll(contacts);
             setListAdapter(adapt);
         }
         else
         {
             //1 or more results
-            locations.add(0,x);
+            //locations.add(0,x);
             contacts.add(0,y);
-
-            adapt = new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_list_item_1, contacts);
+            adapt.clear();
+            adapt.addAll(contacts);
             setListAdapter(adapt);
 
             //Keep only the 5 most recent locations
