@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     String phoneNo;
     String messagebase="http://maps.google.com/maps?saddr="; //+lat+","+lon;
     String messageupdate="";
-    String messageurgent="URGENT ";
     Switch emergency;
 
     //Views and such
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location) {
                 messageupdate = messagebase + location.getLatitude()+ ","+location.getLongitude();
-                messageurgent += messagebase + location.getLatitude()+ ","+location.getLongitude();
                 lat = location.getLatitude();
                 lon = location.getLongitude();
 //                Toast.makeText(MainActivity.this, messageupdate, Toast.LENGTH_LONG).show();
@@ -113,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
+        locationManager.requestLocationUpdates("gps", 2500, 0, locationListener);
 
     }
 
@@ -146,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (emergency.isChecked())
-                smsManager.sendTextMessage(phoneNo, null, messageurgent, null, null);
+                smsManager.sendTextMessage(phoneNo, null, "URGENT " + messageupdate, null, null);
             else
                 smsManager.sendTextMessage(phoneNo, null, messageupdate, null, null);
 
