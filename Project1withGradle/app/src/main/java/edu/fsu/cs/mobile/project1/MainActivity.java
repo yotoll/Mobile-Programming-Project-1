@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     String messagebase="http://maps.google.com/maps?saddr=";//+lat+","+lon;
     String messageupdate="";
 
+    Fragment f;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +47,13 @@ public class MainActivity extends AppCompatActivity {
         sendBtn = findViewById(R.id.sendButton);
         phoneNumber = (EditText) findViewById(R.id.numText);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        
-    
-            onRecent();
-        
-        
+
+
+        f = new LocationList();
+
+        onRecent();
+
+
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             phoneNumber.setText(getIntent().getStringExtra("cnumber"));
         }
 
-    
+
 
         locationListener = new LocationListener() {
             @Override
@@ -90,12 +94,12 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String [] {
+            requestPermissions(new String [] {
                     Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.INTERNET,Manifest.permission_group.SMS,Manifest.permission.READ_CONTACTS,
             },7);
             return;
-            
+
         }
 
         locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
@@ -168,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onRecent()
     {
-        Fragment f = new LocationList();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.add(R.id.fl_recent,f);
