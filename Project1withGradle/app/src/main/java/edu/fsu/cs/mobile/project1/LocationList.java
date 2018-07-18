@@ -1,6 +1,7 @@
 
 package edu.fsu.cs.mobile.project1;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,6 +36,7 @@ public class LocationList extends ListFragment {
     private int taken;
     public static final String TAG = LocationList.class.getCanonicalName();
     public static final String Prefs = "RecentLocFile";
+    public static final String TAKEN = "Taken";
 
     public LocationList() {
         // Required empty public constructor
@@ -52,10 +54,12 @@ public class LocationList extends ListFragment {
         contacts = new ArrayList<String>();
 
 
+        SharedPreferences preferences = getActivity().getSharedPreferences(TAKEN, Activity.MODE_PRIVATE);
+        taken = preferences.getInt(TAKEN,0);
+
         //Reading from SharedPreferences for previous locations
         SharedPreferences settings = getActivity().getSharedPreferences(Prefs, 0);
 
-        taken = settings.getInt("Taken", 0);
         if (taken > 0)
         {
             locations.add(settings.getString("FirstLoc", "Empty"));
@@ -84,12 +88,12 @@ public class LocationList extends ListFragment {
         }
         else
         {
+            locations.add("Empty");
             contacts.add("No results found");
         }
 
         adapt = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, contacts);
-        taken = 0;
         setListAdapter(adapt);
         list = new ListView(getActivity());
 
@@ -102,13 +106,17 @@ public class LocationList extends ListFragment {
     public void onListItemClick(ListView l, View v, int pos, long id)
     {
         super.onListItemClick(l,v,pos,id);
-        //double lat, lon;
 
         if(taken > 0)
         {
             //Parse string for location
             String temp = locations.get(pos).replace("http://maps.google.com/maps?saddr=",
                     "");
+
+            if(temp.contains("URGENT "))
+            {
+                temp.replace("URGENT ","");
+            }
 
             //pull up location
             String del = ",";
@@ -139,13 +147,15 @@ public class LocationList extends ListFragment {
         {   //First result case
             //replace with location
             locations.add(0,x);
+            locations.remove(1);
 
             contacts.add(0,y);
             contacts.remove(1);
 
             taken++;
             adapt = new ArrayAdapter<String>(getActivity(),
-                    android.R.layout.simple_list_item_1, contacts);
+                android.R.layout.simple_list_item_1, contacts);
+
             setListAdapter(adapt);
         }
         else
@@ -166,16 +176,12 @@ public class LocationList extends ListFragment {
                 locations.remove(5);
                 contacts.remove(5);
             }
+            setPreferences();
         }
     }
 
-
-    @Override
-    public void onDetach() {
-        //Write to Shared Prefs?
-        super.onDetach();
-
-        //Write recent locations to the shared preferences
+    public void setPreferences()
+    {
         SharedPreferences preferences = getActivity().getSharedPreferences(Prefs,0);
         SharedPreferences.Editor edit = preferences.edit();
 
@@ -211,6 +217,15 @@ public class LocationList extends ListFragment {
             edit.putString("FifthCont", contacts.get(4));
         }
         edit.commit();
+    }
+
+    @Override
+    public void onDetach() {
+        //Write to Shared Prefs?
+        super.onDetach();
+        setPreferences();
+        //Write recent locations to the shared preferences
+
     }
 
 }
