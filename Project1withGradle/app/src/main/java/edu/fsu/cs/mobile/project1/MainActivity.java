@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     String messagebase="http://maps.google.com/maps?saddr="; //+lat+","+lon;
     String messageupdate="No location";
     Switch emergency;
+    String messageContent;
 
     //Views and such
     EditText phoneNumber;
@@ -61,33 +62,19 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
          if (getIntent().hasExtra("msgContent")) {
              messageContent = extras.getString("msgContent");
-              String holder[] = messageContent.split("=");
-              String holder2[] = holder[1].split(",");
-              lat = Double.parseDouble(holder2[0]);
-              lon = Double.parseDouble(holder2[1]);
-              onMap();
+             if ((messageContent.contains("No location") || (messageContent.contains("URGENT No location"))))
+             {
+                 Toast.makeText(getApplicationContext(), "Location still being detected, please try again", Toast.LENGTH_LONG).show();
+             }
+             else {
+                 String holder[] = messageContent.split("=");
+                 String holder2[] = holder[1].split(",");
+                 lat = Double.parseDouble(holder2[0]);
+                 lon = Double.parseDouble(holder2[1]);
+                 onMap();
+             }
 
          }
-
-
-
-
-//        onRecent();
-
-        sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendSMSMessage();
-
-            }
-        });
-
-        //Check if number is pass to activity
-        if(getIntent().hasExtra("cname") && getIntent().hasExtra("cnumber")){
-            phoneNumber.setText(getIntent().getStringExtra("cnumber"));
-        }
-
-
 
         locationListener = new LocationListener() {
             @Override
@@ -121,8 +108,22 @@ public class MainActivity extends AppCompatActivity {
             return;
 
         }
-
+        
         locationManager.requestLocationUpdates("gps", 2500, 0, locationListener);
+
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendSMSMessage();
+
+            }
+        });
+
+        //Check if number is pass to activity
+        if(getIntent().hasExtra("cname") && getIntent().hasExtra("cnumber")){
+            phoneNumber.setText(getIntent().getStringExtra("cnumber"));
+        }
+
 
     }
 
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
             else
                 smsManager.sendTextMessage(phoneNo, null, messageupdate, null, null);
 
-//            Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -206,19 +207,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onRecent(View v)
-    {
-       LocationList f = new LocationList();
-
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.add(R.id.fl_recent,f);
-        transaction.commit();
-
-        if (getIntent().hasExtra("msgContent"))
-        {
-            Bundle extras = getIntent().getExtras();
-            f.addResult(extras.getString("msgContent"),extras.getString("phoneNum"));
-        }
-    }
+//    public void onRecent(View v)
+//    {
+//       LocationList f = new LocationList();
+//
+//        FragmentManager fm = getSupportFragmentManager();
+//        FragmentTransaction transaction = fm.beginTransaction();
+//        transaction.add(R.id.fl_recent,f);
+//        transaction.commit();
+//
+//        if (getIntent().hasExtra("msgContent"))
+//        {
+//            Bundle extras = getIntent().getExtras();
+//            f.addResult(extras.getString("msgContent"),extras.getString("phoneNum"));
+//        }
+//    }
 }
